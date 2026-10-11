@@ -1,15 +1,15 @@
 # UML 与流程设计
 
-版本：2.0 · 原始基线：2026-10-10 · 修订：2026-10-11 · 状态：当前需求与实现基线。
+版本：2.1 · 原始基线：2026-10-10 · 修订：2026-10-11 · 状态：当前需求与实现基线。
 
-Markdown 内含 UML 类、状态和时序图；PlantUML 标准用例、活动、部署图源见 [图源目录](diagrams/README.md)。所有图描述2.0当前基线，销售取消为正式计划冻结的专门缩量动作；图源结构检查与实际渲染验证区分记录。
+Markdown 内含 UML 类、状态和时序图；PlantUML 标准用例、活动、部署图源见 [图源目录](diagrams/README.md)。所有图描述2.1当前基线，销售取消为正式计划冻结的专门缩量动作；图源结构检查与实际渲染验证区分记录。
 
 ## 用例概览
 
 ```mermaid
 flowchart LR
     User[演示操作者] --> Catalog[维护物料和多级 BOM]
-    User --> Sale[已有可用BOM商品建立并确认销售单]
+    User --> Sale[启用且允许销售的已有BOM商品建立并确认销售单]
     User --> Cancel[取消销售并预览数量影响]
     Cancel --> Credit[逐批缩量与保留完成量重算]
     Credit --> Rollup
@@ -33,6 +33,8 @@ classDiagram
         +code: string
         +type: ItemType
         +unitId: integer
+        +isSellable: boolean
+        +canSell(): boolean
     }
     class BOM {
         +revision: string

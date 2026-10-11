@@ -1,6 +1,6 @@
 # API 契约
 
-版本：2.0 · 原始基线：2026-10-10 · 修订：2026-10-11 · 状态：当前需求与实现基线。
+版本：2.1 · 原始基线：2026-10-10 · 修订：2026-10-11 · 状态：当前需求与实现基线。
 
 路径前缀 `/api/v1`（无结尾斜杠）；以 [api.py](../aps/api.py) 和 [serializers.py](../aps/serializers.py) 为当前接口依据。旧设计字段不作为并列契约。
 
@@ -23,10 +23,10 @@
 |---|---|---|
 | GET /bootstrap | 无 | csrf_token、epoch、revision、物料/优先级枚举 |
 | GET /units | 分页 | 只读单位及精度；无单位CRUD |
-| GET /items | 列表参数 | 物料快照、单位ID、启用状态 |
+| GET /items | 列表参数 | 物料信息、单位ID、启用状态及有效 is_sellable |
 | POST /items | code、name、type、unit_id、active?、is_sellable? | 创建物料 |
 | GET /items/{id} | 无 | 当前物料 |
-| PATCH /items/{id} | code/name/type/unit_id/active | 引用后code/type/unit不可修改 |
+| PATCH /items/{id} | code/name/type/unit_id/active/is_sellable | 引用后code/type/unit不可修改 |
 | DELETE /items/{id} | 通用 | 仅未引用物料 |
 | GET /boms | item_id、status、分页 | BOM列表 |
 | POST /boms | item_id、revision、base_quantity、lines、description? | 创建并验证草稿；子半成品须显式可用BOM |
@@ -178,3 +178,5 @@ has_cancellation_credit说明存在取消保留完成量，总progress可能高�
 详细算法见 [业务规则](03_Business_Rules.md)，当前取消验证见 [20](20_Sales_Cancellation.md)。客户端以HTTP和code共同判断，不能依赖旧设计错误码的别名。
 
 物料接口的 is_sellable 为布尔值；SEMI 可设定，省略时新建默认 false；FINISHED 固定 true、RAW 固定 false。GET /items 返回实际销售资格。销售资格关闭后，已有草稿保存或确认返回业务校验失败，历史已确认单据不追溯撤销。
+
+半成品销售资格字段只接受布尔值；成品固定 true、原料固定 false。销售草稿创建、编辑及确认均验证启用状态、销售资格和完整可用BOM，失败返回422 VALIDATION_ERROR。停用半成品销售资格不撤销已确认订单；冻结物料快照不随当前资格改变。

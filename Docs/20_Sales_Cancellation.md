@@ -27,7 +27,7 @@
 - [前端](../frontend/src/App.vue)：已开工/已完成销售也可取消，预览旧/新数量，解释取消进度记账；历史无效边在图中以虚线标注。
 - 迁移0003添加两个保留量字段，旧记录默认0/1；迁移0004添加依赖active标记，旧依赖默认有效。迁移不改变已有计划数量或进度。
 
-已更新本机 Docker 服务，升级前另存 `/data/before-cancellation-upgrade-20261011.sqlite3`。旧的初始演示备份原样保留；与当前恢复工具匹配的新备份为 [demo-initial-20261011-v2.sqlite3](../backups/demo-initial-20261011-v2.sqlite3)，同样是11种物料、5个BOM、20张确认销售且没有生产单的初始状态。恢复步骤见 [演示数据文档](18_Demo_BOM.md)。
+已更新本机 Docker 服务，升级前另存 `/data/before-cancellation-upgrade-20261011.sqlite3`。旧的初始演示备份原样保留；当时与恢复工具匹配的新备份为本地 demo-initial-20261011-v2.sqlite3（历史记录；当前应使用18文档的v3分发基线），同样是11种物料、5个BOM、20张确认销售且没有生产单的初始状态。恢复步骤见 [演示数据文档](18_Demo_BOM.md)。
 
 ## 实际验证
 

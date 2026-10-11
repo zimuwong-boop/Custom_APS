@@ -3,7 +3,7 @@
   "deployment_status": "DEPLOYED_AND_VERIFIED",
   "checks": {
     "backend_tests": {
-      "passed": 60
+      "passed": 61
     },
     "django_migration_consistency": "PASS",
     "railway_image_build": "PASS",
@@ -20,14 +20,14 @@
     "database_integrity": "PASS",
     "documentation_checks": 611
   },
-  "local_original_instance": "untouched",
+  "local_original_instance": "upgraded_in_place; existing sales and production preserved",
   "railway": {
     "project_name": "devoted-hope",
     "service_name": "Custom_APS",
     "environment": "production",
     "public_url": "https://customaps-production.up.railway.app",
-    "deployment_id": "d6c5f3cc-ef28-4b7f-98b9-b092d27be1c8",
-    "deployed_commit": "366e4152cbfdaf79dfd7539080b47cbb8eb1e8c9",
+    "deployment_id": "a4165aa8-a937-4cfd-868e-e6d19a6eb5ac",
+    "deployed_commit": "061fc9d143965e2b5ef0052ea62a661be601d0c1",
     "volume_mount": "/data",
     "volume_size_mb": 500,
     "port": 8787,
@@ -42,6 +42,13 @@
     "confirmed_sales": 20,
     "production_orders": 0,
     "current_plan_id": 20,
-    "current_plan_status": "DRAFT"
-  }
+    "current_plan_status": "DRAFT",
+    "semi_sale_rules": {
+      "DEMO-SAUCE": true,
+      "DEMO-SAUCE-BULK": false
+    },
+    "bulk_direct_sale_rejected": "422 VALIDATION_ERROR",
+    "negative_sale_test_preserves_sales_and_production": "PASS"
+  },
+  "evidence_note": "Deployment and application checks recorded before documentation-only synchronization; later main commits may trigger automatic deployment."
 }
