@@ -34,21 +34,25 @@ f.油
 - 销售单编号 DEMO-SO-001～020，覆盖单品、混合成品、混合半成品、成品与半成品混合；使用 HIGH / NORMAL / LOW 三种优先级，全部已确认。
 - 当前有排产草稿建议，正式生产单、生产批次均为 0。请在排产页面调整并手工确认。
 - 导入工具：[load_demo_bom.py](../aps/management/commands/load_demo_bom.py)。仅允许空业务库，整批失败回滚，不覆盖现有数据；基础单位可保留。
-- 初始备份：[demo-initial-20261011-v2.sqlite3](../backups/demo-initial-20261011-v2.sqlite3)，容器数据卷内另存同名备份；已通过 SQLite integrity_check。备份包含销售确认、BOM、排产建议和审计。
+- 初始备份：[demo-initial-20261011-v3.sqlite3](../backups/demo-initial-20261011-v3.sqlite3)，容器数据卷内另存同名备份；已通过 SQLite integrity_check。备份包含销售确认、BOM、排产建议和审计。
 
 ### 在另一台机器恢复初始状态
 
 先按 [部署说明](11_Deployment_Operations.md) 准备同版本镜像、`.env`，并启动一次服务建立数据卷。将备份复制到目标项目的 `backups` 目录，然后执行：
 
 ```sh
-docker compose cp backups/demo-initial-20261011-v2.sqlite3 aps:/data/demo-initial-20261011-v2.sqlite3
+docker compose cp backups/demo-initial-20261011-v3.sqlite3 aps:/data/demo-initial-20261011-v3.sqlite3
 docker compose stop aps
 docker run --rm -v custom_aps_data:/data --entrypoint python custom-aps:local \
-  scripts/restore_sqlite.py /data/demo-initial-20261011-v2.sqlite3 /data/aps.sqlite3 --service-stopped
+  scripts/restore_sqlite.py /data/demo-initial-20261011-v3.sqlite3 /data/aps.sqlite3 --service-stopped
 docker compose start aps
 docker compose exec aps python manage.py check_demo_integrity
 ```
 
 恢复会保留当前库的 `.before-restore` 安全副本；再次恢复前须归档该副本。恢复工具使旧页面失效，并将备份中的排产草稿标记为已替代。刷新页面后在排产端重新生成建议即可；销售单、物料和 BOM 恢复到初始数据，不自动建立生产单。
 
-取消缩量功能新增数据库迁移后，提供了升级结构的 v2 初始备份；演示物料、20张销售单和无生产单状态不变。原始备份仍保留，当前代码的恢复工具应使用 v2 文件。
+取消缩量功能新增数据库迁移后，提供了升级结构的 v2 初始备份；演示物料、20张销售单和无生产单状态不变。原始备份仍保留，当前代码的恢复工具应使用 v3 文件。
+
+### 半成品销售资格修正
+
+瓶装蒜蓉酱（DEMO-SAUCE）允许直接销售；蒜蓉酱中间料（DEMO-SAUCE-BULK）仅供生产，不允许直接销售。新初始数据仍包含20张确认销售单，销售明细改为41条，不含中间料直销。已部署实例保留历史销售和生产记录，升级不会自动取消历史订单或清空演示操作。v3初始备份包含销售资格字段和第5个迁移。

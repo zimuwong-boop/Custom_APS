@@ -29,6 +29,11 @@ class Item(Versioned):
     type = models.CharField(max_length=10)
     unit = models.ForeignKey(Unit, on_delete=models.PROTECT)
     active = models.BooleanField(default=True)
+    is_sellable = models.BooleanField(default=False)
+
+    @property
+    def can_sell(self):
+        return self.type == "FINISHED" or (self.type == "SEMI" and self.is_sellable)
 
     class Meta:
         pass

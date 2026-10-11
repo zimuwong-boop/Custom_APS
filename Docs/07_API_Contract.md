@@ -24,7 +24,7 @@
 | GET /bootstrap | 无 | csrf_token、epoch、revision、物料/优先级枚举 |
 | GET /units | 分页 | 只读单位及精度；无单位CRUD |
 | GET /items | 列表参数 | 物料快照、单位ID、启用状态 |
-| POST /items | code、name、type、unit_id、active? | 创建物料 |
+| POST /items | code、name、type、unit_id、active?、is_sellable? | 创建物料 |
 | GET /items/{id} | 无 | 当前物料 |
 | PATCH /items/{id} | code/name/type/unit_id/active | 引用后code/type/unit不可修改 |
 | DELETE /items/{id} | 通用 | 仅未引用物料 |
@@ -85,7 +85,7 @@
 }
 ```
 
-item_id必须已存在且启用，为FINISHED/SEMI。未指定bom_id要求存在完整ACTIVE默认BOM；显式指定允许该物料ACTIVE/RETIRED完整版本。保存时验证但未指定默认版本的草稿不提前冻结，确认时解析并冻结；确认失败整单回滚。
+item_id必须已存在且启用，为FINISHED，或is_sellable=true的SEMI。未指定bom_id要求存在完整ACTIVE默认BOM；显式指定允许该物料ACTIVE/RETIRED完整版本。保存时验证但未指定默认版本的草稿不提前冻结，确认时解析并冻结；确认失败整单回滚。
 
 ## BOM 草稿示例
 
@@ -176,3 +176,5 @@ has_cancellation_credit说明存在取消保留完成量，总progress可能高�
 | 503 | DATABASE_BUSY / NOT_READY | SQLite忙或就绪检查失败 |
 
 详细算法见 [业务规则](03_Business_Rules.md)，当前取消验证见 [20](20_Sales_Cancellation.md)。客户端以HTTP和code共同判断，不能依赖旧设计错误码的别名。
+
+物料接口的 is_sellable 为布尔值；SEMI 可设定，省略时新建默认 false；FINISHED 固定 true、RAW 固定 false。GET /items 返回实际销售资格。销售资格关闭后，已有草稿保存或确认返回业务校验失败，历史已确认单据不追溯撤销。

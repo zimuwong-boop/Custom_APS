@@ -57,7 +57,13 @@ def api():
 def item(api, code, kind, unit="PCS"):
     return api.post(
         "items",
-        {"code": code, "name": code, "type": kind, "unit_id": Unit.objects.get(code=unit).id},
+        {
+            "code": code,
+            "name": code,
+            "type": kind,
+            "unit_id": Unit.objects.get(code=unit).id,
+            "is_sellable": kind != "RAW",
+        },
         status=201,
     )
 
@@ -1187,3 +1193,110 @@ def test_cancel_quantity_changes_roll_back_on_failure(api, chain, monkeypatch):
     assert SalesOrder.objects.get(pk=cancelled["id"]).status == "CONFIRMED"
     assert AuditEvent.objects.count() == count
     assert parent.sales_allocations.get(sales_line__order_id=cancelled["id"]).qty_u == 40_000_000
+
+
+def test_semi_sale_opt_in_and_confirmation_revalidation(api):
+    raw = item(api, "SELL-R", "RAW")
+    semi = api.post(
+        "items",
+        {
+            "code": "SELL-S",
+            "name": "Intermediate",
+            "type": "SEMI",
+            "unit_id": raw["unit_id"],
+        },
+        status=201,
+    )
+    assert semi["is_sellable"] is False
+    bom(api, semi, [(raw, None, "1")])
+    payload = {
+        "number": "SELL-SO",
+        "customer_name": "Test",
+        "lines": [
+            {"item_id": semi["id"], "quantity": "2"},
+        ],
+    }
+    api.post("sales-orders", payload, status=422)
+    assert not SalesOrder.objects.filter(number="SELL-SO").exists()
+    semi = api.call(
+        f"items/{semi['id']}",
+        "PATCH",
+        {
+            "expected_version": semi["version"],
+            "is_sellable": True,
+        },
+    )
+    sale = api.post("sales-orders", payload, status=201)
+    semi = api.call(
+        f"items/{semi['id']}",
+        "PATCH",
+        {
+            "expected_version": semi["version"],
+            "is_sellable": False,
+        },
+    )
+    api.post(
+        f"sales-orders/{sale['id']}/confirm",
+        {
+            "expected_version": sale["version"],
+        },
+        status=422,
+    )
+    assert SalesOrder.objects.get(pk=sale["id"]).status == "DRAFT"
+    finished = item(api, "SELL-F", "FINISHED")
+    bom(
+        api, finished, [(semi, {"id": BOM.objects.get(item_id=semi["id"]).id}, "1")]
+    )  # Non-saleable semi remains a valid BOM component.
+    api.post(
+        "sales-orders",
+        {
+            **payload,
+            "number": "SELL-F-SO",
+            "lines": [
+                {"item_id": finished["id"], "quantity": "1"},
+            ],
+        },
+        status=201,
+    )
+    api.call(
+        f"items/{raw['id']}",
+        "PATCH",
+        {
+            "expected_version": raw["version"],
+            "is_sellable": True,
+        },
+        status=422,
+    )
+    api.call(
+        f"items/{semi['id']}",
+        "PATCH",
+        {
+            "expected_version": semi["version"],
+            "is_sellable": "false",
+        },
+        status=422,
+    )
+
+    semi = api.call(
+        f"items/{semi['id']}",
+        "PATCH",
+        {
+            "expected_version": semi["version"],
+            "is_sellable": True,
+        },
+    )
+    confirmed = api.post(
+        f"sales-orders/{sale['id']}/confirm",
+        {
+            "expected_version": sale["version"],
+        },
+    )
+    api.call(
+        f"items/{semi['id']}",
+        "PATCH",
+        {
+            "expected_version": semi["version"],
+            "is_sellable": False,
+        },
+    )
+    assert SalesOrder.objects.get(pk=confirmed["id"]).status == "CONFIRMED"

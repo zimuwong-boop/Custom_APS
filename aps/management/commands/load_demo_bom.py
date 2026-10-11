@@ -62,6 +62,7 @@ class Command(BaseCommand):
                     "code": code,
                     "name": name,
                     "type": kind,
+                    "is_sellable": kind == "FINISHED" or code == "DEMO-SAUCE",
                     "unit_id": Unit.objects.get(code=unit).id,
                 },
             )
@@ -116,6 +117,19 @@ class Command(BaseCommand):
             ["DEMO-A", "DEMO-B", "DEMO-C", "DEMO-SAUCE", "DEMO-SAUCE-BULK"],
         ]
         for index, products in enumerate(combinations, 1):
+            # Intermediate bulk sauce is a production component, never a sale item.
+            if "DEMO-SAUCE-BULK" in products:
+                products = [code for code in products if code != "DEMO-SAUCE-BULK"]
+                replacement = next(
+                    (
+                        code
+                        for code in ["DEMO-SAUCE", "DEMO-A", "DEMO-B", "DEMO-C"]
+                        if code not in products
+                    ),
+                    None,
+                )
+                if replacement:
+                    products.append(replacement)
             sale = post(
                 "sales-orders",
                 {

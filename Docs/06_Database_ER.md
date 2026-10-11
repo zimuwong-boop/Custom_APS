@@ -42,6 +42,7 @@ erDiagram
         integer id PK
         string code UK
         string type
+        boolean is_sellable
         integer unit_id FK
     }
     BOM {
@@ -126,7 +127,7 @@ erDiagram
 | 表 | 字段 | 约束/说明 |
 |---|---|---|
 | Unit | code、name、decimal_places | code 唯一；精度 0..6；被物料引用后精度冻结 |
-| Item | code、name、type、unit_id、active、version | 类型 FINISHED/SEMI/RAW；引用后 code/type/unit 不可改；名称变更不覆盖历史快照 |
+| Item | code、name、type、unit_id、active、is_sellable、version | 类型 FINISHED/SEMI/RAW；引用后 code/type/unit 不可改；名称变更不覆盖历史快照 |
 
 ### BOM / BOMLine
 

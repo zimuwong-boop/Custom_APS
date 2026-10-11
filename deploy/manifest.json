@@ -9,26 +9,31 @@
     "items": 11,
     "active_boms": 5,
     "confirmed_sales": 20,
-    "sales_lines": 42,
+    "sales_lines": 41,
     "production_orders": 0,
-    "plan_status": "DRAFT"
+    "plan_status": "DRAFT",
+    "semi_sale_rules": {
+      "DEMO-SAUCE": true,
+      "DEMO-SAUCE-BULK": false
+    }
   },
   "files": {
     "images/custom-aps-demo-arm64.tar.gz": {
-      "size_bytes": 54958280,
-      "sha256": "13d68c4ce2162e1ce2a89b12dd9978d02418a04eb8962ef1c5f5e9951b7c17bb"
+      "size_bytes": 54960498,
+      "sha256": "f08de3ba7444ae64ce8b36c18d2178e4d672915c83f8964b3b912f9a03be5fa8"
     },
     "images/custom-aps-demo-amd64.tar.gz": {
-      "size_bytes": 55527294,
-      "sha256": "131e7ff037b1f43e023e6f81ff23085a4e5bed9a6c6188b1b88251beec88a168"
+      "size_bytes": 55527149,
+      "sha256": "f629a616ea90532d0cfeaae4c6698bf2cb5afc1ef3c68489eedd7119966020e2"
     },
     "demo-initial.sqlite3": {
-      "size_bytes": 667648,
-      "sha256": "1f0dab42aa410d9acc21f834a8ad71acd2490985e99a02e7848149b207d649e1"
+      "size_bytes": 651264,
+      "sha256": "c020f90032fea76752b116af43945e64b7eea94013abed8cdf5176a32758b49f"
     },
     "source.tar.gz": {
-      "size_bytes": 117127,
-      "sha256": "df791dd239afdc81a1b9717eb6f0cdb253004302f049d80be1ea8c8f24e76f18"
+      "size_bytes": 124140,
+      "sha256": "3b512b2aeda71bbacd5176ed402ab7ddcaf0e16f8a40565b78cabb5eeca7d19e"
     }
-  }
+  },
+  "release": "v0.2.0-demo"
 }

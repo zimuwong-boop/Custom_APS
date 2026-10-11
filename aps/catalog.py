@@ -23,7 +23,7 @@ def get(model, pk):
 def item_write(data, obj=None):
     fields(
         data,
-        ["code", "name", "type", "unit_id", "active"],
+        ["code", "name", "type", "unit_id", "active", "is_sellable"],
         ["code", "name", "type", "unit_id"] if obj is None else [],
     )
     if obj is None:
@@ -35,7 +35,7 @@ def item_write(data, obj=None):
             "IMMUTABLE",
             409,
         )
-    for key in ["code", "name", "type", "unit_id", "active"]:
+    for key in ["code", "name", "type", "unit_id", "active", "is_sellable"]:
         if key in data:
             setattr(obj, key, data[key])
     require(obj.type in ("FINISHED", "SEMI", "RAW"), "物料类型无效")
@@ -47,6 +47,13 @@ def item_write(data, obj=None):
         and 0 < len(obj.name.strip()) <= 120,
         "物料编码、名称或启用状态无效",
     )
+    require(type(obj.is_sellable) is bool, "可销售设置必须为布尔值")
+    if obj.type != "SEMI":
+        require(
+            "is_sellable" not in data or data["is_sellable"] == (obj.type == "FINISHED"),
+            "成品固定可销售，原料不可销售",
+        )
+        obj.is_sellable = obj.type == "FINISHED"
     get(Unit, obj.unit_id)
     if obj.pk:
         touch(obj)
@@ -150,7 +157,7 @@ def sale_write(data, obj=None):
                 protocol=False,
             )
             item = get(Item, row["item_id"])
-            require(item.active and item.type != "RAW", "只能销售启用的成品或半成品")
+            require(item.active and item.can_sell, "只能销售启用的成品或已允许销售的半成品")
             priority = row.get("priority_override")
             require(priority is None or priority in PRIORITIES, "行优先级无效")
             validated_bom = choose_bom(item, row.get("bom_id"))
@@ -165,7 +172,7 @@ def sale_write(data, obj=None):
             )
     require(obj.lines.exists(), "销售单必须包含商品")
     for line in obj.lines.select_related("item__unit"):
-        require(line.item.active and line.item.type != "RAW", "只能销售启用的成品或半成品")
+        require(line.item.active and line.item.can_sell, "只能销售启用的成品或已允许销售的半成品")
         choose_bom(line.item, line.bom_id)
     return obj
 
@@ -173,7 +180,7 @@ def sale_write(data, obj=None):
 def confirm_sale(obj):
     require(obj.status == "DRAFT", "销售单不可重复确认", "IMMUTABLE", 409)
     for line in obj.lines.select_related("item__unit"):
-        require(line.item.active, "销售物料已停用")
+        require(line.item.active and line.item.can_sell, "销售物料已停用或不允许销售")
         line.bom = choose_bom(line.item, line.bom_id)
         line.effective_priority = line.priority_override or obj.default_priority
         line.item_snapshot_json = snapshot(line.item)

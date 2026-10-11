@@ -152,7 +152,14 @@ function newForm(row?: Row) {
     form.value = editing.value
       ? JSON.parse(JSON.stringify(editing.value))
       : section.value === 'items'
-        ? { code: '', name: '', type: 'SEMI', unit_id: units.value[0]?.id, active: true }
+        ? {
+            code: '',
+            name: '',
+            type: 'SEMI',
+            unit_id: units.value[0]?.id,
+            active: true,
+            is_sellable: false,
+          }
         : section.value === 'boms'
           ? { item_id: null, revision: 'V1', base_quantity: '1', description: '', lines: [] }
           : { number: '', customer_name: '', default_priority: 'NORMAL', notes: '', lines: [] }
@@ -174,7 +181,14 @@ async function saveForm() {
     const f = form.value
     const body =
       section.value === 'items'
-        ? { code: f.code, name: f.name, type: f.type, unit_id: f.unit_id, active: f.active }
+        ? {
+            code: f.code,
+            name: f.name,
+            type: f.type,
+            unit_id: f.unit_id,
+            active: f.active,
+            is_sellable: f.type === 'FINISHED' || (f.type === 'SEMI' && !!f.is_sellable),
+          }
         : section.value === 'boms'
           ? {
               item_id: f.item_id,
@@ -769,6 +783,10 @@ onMounted(() => {
                     labels[row.type]
                   }}</el-tag></template
                 ></el-table-column
+              ><el-table-column label="可销售"
+                ><template #default="{ row }">{{
+                  row.is_sellable ? '是' : '否'
+                }}</template></el-table-column
               ><el-table-column prop="unit" label="单位" /><el-table-column label="启用"
                 ><template #default="{ row }">{{
                   row.active ? '是' : '否'
@@ -982,6 +1000,13 @@ onMounted(() => {
                   :value="u.id" /></el-select
             ></el-form-item>
           </div>
+          <el-form-item v-if="form.type === 'SEMI'" label="销售设置">
+            <el-switch
+              v-model="form.is_sellable"
+              active-text="允许直接销售"
+              inactive-text="仅供生产使用"
+            />
+          </el-form-item>
           <el-switch v-model="form.active" active-text="启用物料"
         /></template>
         <template v-else-if="section === 'boms'"
@@ -989,9 +1014,7 @@ onMounted(() => {
             <el-form-item label="所属成品 / 半成品"
               ><el-select v-model="form.item_id" filterable :disabled="!!editing"
                 ><el-option
-                  v-for="i in items.filter(
-                    (i) => i.type !== 'RAW' && i.active && availableBoms(i.id).length > 0,
-                  )"
+                  v-for="i in items.filter((i) => i.type !== 'RAW' && i.active)"
                   :key="i.id"
                   :label="i.code + ' · ' + i.name"
                   :value="i.id" /></el-select></el-form-item
@@ -1037,7 +1060,7 @@ onMounted(() => {
               @change="line.bom_id = null"
               ><el-option
                 v-for="i in items.filter(
-                  (i) => i.type !== 'RAW' && i.active && availableBoms(i.id).length > 0,
+                  (i) => i.is_sellable && i.active && availableBoms(i.id).length > 0,
                 )"
                 :key="i.id"
                 :label="i.code + ' · ' + i.name"

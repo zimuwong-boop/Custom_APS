@@ -24,7 +24,7 @@ def serialize(obj, detail=True):
     if isinstance(obj, Unit):
         base.update(code=obj.code, name=obj.name, decimal_places=obj.decimal_places)
     elif isinstance(obj, Item):
-        base.update(snapshot(obj), unit_id=obj.unit_id, active=obj.active)
+        base.update(snapshot(obj), unit_id=obj.unit_id, active=obj.active, is_sellable=obj.can_sell)
     elif isinstance(obj, BOM):
         base.update(
             item_id=obj.item_id,
