@@ -33,6 +33,17 @@ CSRF_FAILURE_VIEW = "aps.api.csrf_failure"
 CSRF_TRUSTED_ORIGINS = os.environ.get(
     "CSRF_TRUSTED_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173"
 ).split(",")
+# Railway terminates HTTPS before forwarding to the application.
+# Trust its proxy header only for deployments that explicitly enable this setting.
+if os.environ.get("TRUST_PROXY_HEADERS") == "1":
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    ALLOWED_HOSTS += ["healthcheck.railway.app"]
+
+railway_domain = os.environ.get("RAILWAY_PUBLIC_DOMAIN", "").strip()
+if railway_domain:
+    ALLOWED_HOSTS += [railway_domain]
+    CSRF_TRUSTED_ORIGINS += [f"https://{railway_domain}"]
+
 DATA_UPLOAD_MAX_MEMORY_SIZE = 20 * 1024 * 1024
 APPEND_SLASH = False
 GRAPH_NODE_BUDGET = int(os.environ.get("GRAPH_NODE_BUDGET", "20000"))

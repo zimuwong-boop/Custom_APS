@@ -1,0 +1,25 @@
+{
+  "tested_at": "2026-10-11",
+  "deployment_status": "PREPARED_NOT_DEPLOYED",
+  "checks": {
+    "backend_tests": {
+      "passed": 60
+    },
+    "django_migration_consistency": "PASS",
+    "railway_image_build": "PASS",
+    "dynamic_port_9090": "PASS",
+    "initial_seed": {
+      "items": 11,
+      "confirmed_sales": 20,
+      "production_orders": 0
+    },
+    "https_proxy_csrf_protected_planning_write": "PASS",
+    "restart_preserves_recalculated_plan": "PASS",
+    "healthcheck_host_before_public_domain": "PASS",
+    "missing_volume_startup_rejected": "PASS",
+    "database_integrity": "PASS",
+    "documentation_checks": 611
+  },
+  "local_original_instance": "untouched",
+  "railway_management_connection": "not yet exposed in current conversation tools"
+}

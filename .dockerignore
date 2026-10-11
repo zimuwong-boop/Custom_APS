@@ -20,3 +20,10 @@ frontend/playwright-report
 frontend/test-results
 frontend/coverage
 deploy
+
+# Railway needs only the initial seed and its startup files.
+!deploy/
+deploy/*
+!deploy/demo-initial.sqlite3
+!deploy/seed_database.py
+!deploy/railway/
