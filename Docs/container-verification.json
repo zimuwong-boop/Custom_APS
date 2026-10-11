@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "cpu_limit": 2,
+  "memory_limit": "4g",
+  "checks": [
+    "Fresh start: units only, no business data; readiness healthy.",
+    "Two concurrent writers: exactly one committed, the other received VERSION_CONFLICT.",
+    "Restart preserved completed progress and batch genealogy.",
+    "Restore recovered original progress and batch number; safety copy retained.",
+    "Network disabled: local API and bundled SPA served successfully without external services.",
+    "Read-only database: ready returned 503 while live remained 200."
+  ]
+}

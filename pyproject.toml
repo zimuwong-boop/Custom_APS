@@ -1,0 +1,21 @@
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "tests.settings"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-ra --strict-markers --strict-config"
+filterwarnings = ["error"]
+
+[tool.coverage.run]
+branch = true
+omit = [".venv/*", "tests/*", "Docs/tools/*"]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+extend-exclude = [".venv", ".tools", "frontend/node_modules", "frontend/dist"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.ruff.format]
+quote-style = "double"

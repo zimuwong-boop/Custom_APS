@@ -1,0 +1,19 @@
+services:
+  aps:
+    image: custom-aps-demo:${APS_IMAGE_ARCH:-arm64}
+    ports:
+      - "127.0.0.1:${APS_PORT:-8000}:8000"
+    environment:
+      SECRET_KEY: "${SECRET_KEY:?Run start.sh first}"
+      ALLOWED_HOSTS: localhost,127.0.0.1
+      CSRF_TRUSTED_ORIGINS: "http://localhost:${APS_PORT:-8000},http://127.0.0.1:${APS_PORT:-8000}"
+    entrypoint: ["/bin/sh", "/opt/deploy/entrypoint.sh"]
+    volumes:
+      - demo_data:/data
+      - ./demo-initial.sqlite3:/opt/deploy/demo-initial.sqlite3:ro
+      - ./entrypoint.sh:/opt/deploy/entrypoint.sh:ro
+      - ./seed_database.py:/opt/deploy/seed_database.py:ro
+      - ./reset_database.py:/opt/deploy/reset_database.py:ro
+    restart: unless-stopped
+volumes:
+  demo_data:

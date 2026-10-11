@@ -1,0 +1,20 @@
+@startuml
+skinparam shadowing false
+node "演示主机" {
+  artifact "浏览器\nVue页面" as Browser
+  node "单个Docker运行容器" {
+    node "单同步Python应用服务" as Server {
+      component "Django API与领域服务" as API
+      artifact "Vue静态构建产物" as Static
+    }
+  }
+  database "持久化卷 /data\nSQLite、配置、编号序列" as Data
+}
+Browser --> API : 同源HTTP /api/v1
+Browser --> Static : HTTP静态资源
+API --> Data : 事务读写
+note bottom of Server
+无登录权限、Redis、Celery或独立数据库服务
+构建阶段使用Node，运行不需要Node服务
+end note
+@enduml

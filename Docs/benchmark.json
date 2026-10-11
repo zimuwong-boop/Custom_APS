@@ -1,0 +1,42 @@
+{
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "processor": "arm64",
+  "load": {
+    "sales": 100,
+    "sales_lines": 500,
+    "production_nodes": 2000,
+    "dependency_edges": 5000
+  },
+  "warmups": 5,
+  "failure_rate": 0,
+  "timings": {
+    "sales_query": {
+      "samples": 30,
+      "median_seconds": 0.1395,
+      "p95_seconds": 0.15,
+      "max_seconds": 0.1556
+    },
+    "plan_suggestion": {
+      "samples": 30,
+      "median_seconds": 0.3956,
+      "p95_seconds": 0.4701,
+      "max_seconds": 0.51
+    },
+    "plan_confirmation": {
+      "seconds": 1.0078
+    },
+    "progress_recompute": {
+      "samples": 30,
+      "median_seconds": 0.5382,
+      "p95_seconds": 0.5643,
+      "max_seconds": 0.5733
+    },
+    "production_query": {
+      "samples": 30,
+      "median_seconds": 0.0026,
+      "p95_seconds": 0.003,
+      "max_seconds": 0.0034
+    }
+  },
+  "reference_hardware_note": "Measured on this development Mac, not a 2 vCPU / 4GB restricted machine."
+}

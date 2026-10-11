@@ -1,0 +1,95 @@
+{
+  "status": "PASS",
+  "scope": "当前用户状态一致性副本；实际演示库未取消任何销售",
+  "cancelled_in_copy": [
+    {
+      "sales_order_number": "TEST-LOW-F87BC090",
+      "quantity_changes": [
+        {
+          "id": 16,
+          "batch_number": "P20261011-000002-L00-0001",
+          "old_quantity": "2",
+          "new_quantity": "0",
+          "cancelled": true
+        },
+        {
+          "id": 17,
+          "batch_number": "P20261011-000002-L01-0002",
+          "old_quantity": "24",
+          "new_quantity": "0",
+          "cancelled": true
+        },
+        {
+          "id": 18,
+          "batch_number": "P20261011-000002-L02-0003",
+          "old_quantity": "24",
+          "new_quantity": "0",
+          "cancelled": true
+        }
+      ],
+      "integrity": "PASS"
+    },
+    {
+      "sales_order_number": "DEMO-SO-003",
+      "quantity_changes": [
+        {
+          "id": 3,
+          "batch_number": "P20261011-000001-L00-0003",
+          "old_quantity": "84",
+          "new_quantity": "73",
+          "cancelled": false
+        },
+        {
+          "id": 10,
+          "batch_number": "P20261011-000001-L01-0010",
+          "old_quantity": "7160",
+          "new_quantity": "6764",
+          "cancelled": false
+        },
+        {
+          "id": 13,
+          "batch_number": "P20261011-000001-L02-0013",
+          "old_quantity": "7245",
+          "new_quantity": "6849",
+          "cancelled": false
+        }
+      ],
+      "integrity": "PASS"
+    },
+    {
+      "sales_order_number": "DEMO-SO-001",
+      "quantity_changes": [
+        {
+          "id": 1,
+          "batch_number": "P20261011-000001-L00-0001",
+          "old_quantity": "50",
+          "new_quantity": "43",
+          "cancelled": false
+        },
+        {
+          "id": 11,
+          "batch_number": "P20261011-000001-L01-0011",
+          "old_quantity": "4414",
+          "new_quantity": "4330",
+          "cancelled": false
+        },
+        {
+          "id": 14,
+          "batch_number": "P20261011-000001-L02-0014",
+          "old_quantity": "4531",
+          "new_quantity": "4447",
+          "cancelled": false
+        }
+      ],
+      "integrity": "PASS"
+    }
+  ],
+  "remaining_sales_completed": 18,
+  "checks": [
+    "逐批缩量、原批次号保持",
+    "所有有效批次进度不降低",
+    "独占已完成销售取消",
+    "共享在制销售取消及多级需求重算",
+    "取消后继续生产至剩余销售全部完成"
+  ]
+}

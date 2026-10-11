@@ -1,0 +1,7 @@
+# Runtime: Django 5.2 LTS, REST API, graph snapshot validation and static serving.
+Django>=5.2,<5.3
+djangorestframework>=3.16,<4
+django-filter>=25,<27
+gunicorn>=23,<26
+whitenoise>=6.9,<7
+jsonschema>=4.23,<5

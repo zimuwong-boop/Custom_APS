@@ -1,0 +1,46 @@
+{
+  "platform": "Linux-7.0.14-linuxkit-aarch64-with-glibc2.36",
+  "processor": "aarch64",
+  "load": {
+    "sales": 100,
+    "sales_lines": 500,
+    "production_nodes": 2000,
+    "dependency_edges": 5000
+  },
+  "warmups": 5,
+  "failure_rate": 0,
+  "timings": {
+    "sales_query": {
+      "samples": 30,
+      "median_seconds": 0.1589,
+      "p95_seconds": 0.1808,
+      "max_seconds": 0.2657
+    },
+    "plan_suggestion": {
+      "samples": 30,
+      "median_seconds": 0.4133,
+      "p95_seconds": 0.4529,
+      "max_seconds": 0.4628
+    },
+    "plan_confirmation": {
+      "samples": 30,
+      "median_seconds": 1.1489,
+      "p95_seconds": 1.1835,
+      "max_seconds": 1.2034
+    },
+    "progress_recompute": {
+      "samples": 30,
+      "median_seconds": 0.6076,
+      "p95_seconds": 0.635,
+      "max_seconds": 0.6367
+    },
+    "production_query": {
+      "samples": 30,
+      "median_seconds": 0.0028,
+      "p95_seconds": 0.0031,
+      "max_seconds": 0.0033
+    }
+  },
+  "resource_limits": "2 vCPU / 4GB",
+  "reference_hardware_note": "Measured in a Docker container on the development Mac with explicit limits of 2 vCPU / 4GB."
+}

@@ -1,0 +1,24 @@
+@startuml
+skinparam shadowing false
+start
+:读取确认销售的未安排需求;
+if (BOM、单位、数量合法?) then (是)
+  :迭代展开多级BOM;
+  :按物料、版本、优先级聚合;
+  :生成建议图、分配及原料需求;
+  repeat
+    :用户拆合、分配并设置子单占比;
+    :校验无环、来源及数量守恒;
+  repeat while (需要修正?) is (是)
+  if (建议版本仍有效?) then (是)
+    :事务内生成生产单、独立批次与关系;
+    :保留正式快照并锁定普通结构编辑
+销售取消另走专门缩量流程;
+  else (否)
+    :报告STALE_PLAN，要求刷新;
+  endif
+else (否)
+  :报告具体错误，不部分确认;
+endif
+stop
+@enduml

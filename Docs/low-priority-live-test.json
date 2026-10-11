@@ -1,0 +1,25 @@
+{
+  "status": "PASS",
+  "scope": "用户授权的当前运行库实际操作",
+  "sales_order_id": 21,
+  "sales_order_number": "TEST-LOW-F87BC090",
+  "original_plan_id": 20,
+  "new_plan_id": 21,
+  "rejected_existing_plan_edit": {
+    "code": "STALE_PLAN",
+    "message": "排产草稿已过期或冻结"
+  },
+  "new_batches": [
+    "P20261011-000002-L02-0003",
+    "P20261011-000002-L01-0002",
+    "P20261011-000002-L00-0001"
+  ],
+  "checks": [
+    "新增2包装A蒜蓉酱销售单并确认，默认/有效优先级均LOW",
+    "手工把新销售行加入既有正式LOW计划返回409 STALE_PLAN",
+    "在新草稿手工拆成1+1再合并为2，所有层级始终LOW",
+    "新父单在子单完成前开工被拒绝",
+    "依次手工完成蒜蓉酱半成品→瓶装蒜蓉酱→A包装，三层均LOW",
+    "新销售100%完成且追溯3个新批次；原15张生产单所有字段保持不变"
+  ]
+}

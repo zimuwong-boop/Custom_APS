@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-11",
+  "arm64": {
+    "fresh_start": "PASS",
+    "initial_counts": {
+      "items": 11,
+      "confirmed_sales": 20,
+      "production_orders": 0
+    },
+    "confirm_plan": {
+      "production_orders": 15
+    },
+    "manual_leaf_progress_percent": 60,
+    "restart_preserves_progress": "PASS",
+    "reset_demo": "PASS",
+    "reset_epoch": 2,
+    "reset_recreates_draft": "PASS",
+    "reset_safety_backup": "PASS",
+    "database_integrity": "PASS"
+  },
+  "amd64": {
+    "image_build": "PASS",
+    "archive_import": "PASS",
+    "runtime": "NOT_COMPLETED: local cross-architecture container remained in Created state; temporary container removed"
+  },
+  "repeated_reset": "NOT_COMPLETED: temporary container creation stalled; first reset passed",
+  "other_checks": {
+    "shell_syntax": "PASS",
+    "ruff": "PASS",
+    "source_excludes_secrets_and_runtime_data": "PASS",
+    "image_gzip_integrity": "PASS",
+    "documentation_checks": 611,
+    "original_instance_health": "PASS"
+  },
+  "test_project": "aps-demo-package-verify (cleaned up; original custom_aps untouched)"
+}

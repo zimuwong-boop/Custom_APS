@@ -1,0 +1,40 @@
+@startuml
+left to right direction
+skinparam shadowing false
+actor "演示操作者\n无账号权限" as Operator
+rectangle "定制生产排产演示系统" {
+  usecase "维护物料与多级BOM" as Catalog
+  usecase "草稿强制可用BOM" as SaleValidate
+  usecase "确认销售单" as Sale
+  usecase "自动生成排产建议" as Suggest
+  usecase "拆合建议与设置占比" as Adjust
+  usecase "确认生产计划与批次" as Confirm
+  usecase "校验数量及依赖" as Validate
+  usecase "手工开始生产" as Start
+  usecase "调整自身生产进度" as Progress
+  usecase "重算父单与销售进度" as Rollup
+  usecase "预览并确认销售取消" as Cancel
+  usecase "缩减批次及多级需求" as Shrink
+  usecase "保留完成量重算进度" as Credit
+  usecase "双向批次追溯" as Trace
+  usecase "预览并确认重置" as Reset
+}
+Operator --> Catalog
+Operator --> Sale
+Operator --> Cancel
+Operator --> Adjust
+Operator --> Confirm
+Operator --> Start
+Operator --> Progress
+Operator --> Trace
+Operator --> Reset
+Sale ..> SaleValidate : <<include>>
+Cancel ..> Shrink : <<include>>
+Cancel ..> Credit : <<include>>
+Credit ..> Rollup : <<include>>
+Sale ..> Suggest : <<include>>
+Adjust ..> Validate : <<include>>
+Confirm ..> Validate : <<include>>
+Start ..> Validate : <<include>>
+Progress ..> Rollup : <<include>>
+@enduml

@@ -1,0 +1,34 @@
+.venv/
+.tools/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.hypothesis/
+.coverage
+coverage.xml
+htmlcov/
+.env
+.env.local
+*.sqlite3
+*.sqlite3-*
+data/
+backups/
+frontend/node_modules/
+frontend/dist/
+frontend/coverage/
+frontend/playwright-report/
+frontend/test-results/
+.DS_Store
+
+staticfiles/
+
+# Only the initial demo database is distributable.
+!deploy/demo-initial.sqlite3
+# Large deploy archives are published as GitHub Release assets.
+/deploy/images/*.tar.gz
+/deploy/custom-aps-demo-deploy.tar.gz
+.env.*
+!.env.example
+.codex/
+.agents/
