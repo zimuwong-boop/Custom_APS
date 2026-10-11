@@ -34,4 +34,4 @@ cd deploy
 
 ARM64 已通过启动和恢复验证；AMD64 已完成构建及镜像导入，运行验证尚未完成。完整部署包、端口设置和使用说明见 [deploy](deploy/README.md)。
 
-Railway 云端单实例部署配置见 [deploy/railway](deploy/railway/README.md)。
+Railway [在线演示](https://customaps-production.up.railway.app)，单实例部署配置见 [deploy/railway](deploy/railway/README.md)。

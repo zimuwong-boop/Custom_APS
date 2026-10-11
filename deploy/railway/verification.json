@@ -1,6 +1,6 @@
 {
   "tested_at": "2026-10-11",
-  "deployment_status": "PREPARED_NOT_DEPLOYED",
+  "deployment_status": "DEPLOYED_AND_VERIFIED",
   "checks": {
     "backend_tests": {
       "passed": 60
@@ -21,5 +21,27 @@
     "documentation_checks": 611
   },
   "local_original_instance": "untouched",
-  "railway_management_connection": "not yet exposed in current conversation tools"
+  "railway": {
+    "project_name": "devoted-hope",
+    "service_name": "Custom_APS",
+    "environment": "production",
+    "public_url": "https://customaps-production.up.railway.app",
+    "deployment_id": "d6c5f3cc-ef28-4b7f-98b9-b092d27be1c8",
+    "deployed_commit": "366e4152cbfdaf79dfd7539080b47cbb8eb1e8c9",
+    "volume_mount": "/data",
+    "volume_size_mb": 500,
+    "port": 8787,
+    "configuration_method": "official Railway CLI; GitHub autodeploy"
+  },
+  "online_checks": {
+    "health_ready": "PASS",
+    "homepage": "PASS",
+    "frontend_assets": 2,
+    "items": 11,
+    "boms": 5,
+    "confirmed_sales": 20,
+    "production_orders": 0,
+    "current_plan_id": 20,
+    "current_plan_status": "DRAFT"
+  }
 }

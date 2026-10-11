@@ -1,7 +1,9 @@
 # Railway 单实例部署
 
+已部署到现有项目 `devoted-hope` / `production` / `Custom_APS`，访问 [在线演示](https://customaps-production.up.railway.app)。
+
 从 GitHub 仓库 `zimuwong-boop/Custom_APS` 的 `main` 分支部署，根目录保留 `/`。
-`railway.json` 自动选择本目录 Dockerfile，前后端在同一个服务中运行；无需上传 Release 镜像。
+`railway.json` 自动选择本目录 Dockerfile（不包含 Railway 不支持的 Docker `VOLUME` 声明），前后端在同一个服务中运行；无需上传 Release 镜像。
 
 ## 服务配置
 
